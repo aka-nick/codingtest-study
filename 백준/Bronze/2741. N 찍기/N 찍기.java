@@ -4,9 +4,12 @@ public class Main {
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		int n = sc.nextInt();
+		StringBuffer sb = new StringBuffer();
 		
 		for (int i = 1; i <= n; i += 1) {			
-			System.out.println(i);
+			sb.append(i).append('\n');
 		}
+		
+		System.out.print(sb.toString());
 	}
 }
