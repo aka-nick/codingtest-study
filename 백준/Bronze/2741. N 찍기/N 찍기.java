@@ -10,6 +10,7 @@ public class Main {
 			sb.append(i).append('\n');
 		}
 		
+		sc.close();
 		System.out.print(sb.toString());
 	}
 }
