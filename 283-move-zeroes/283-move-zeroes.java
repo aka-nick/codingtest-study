@@ -15,13 +15,8 @@ class Solution {
 	}
 	
 	public void swap(int[] arr, int idx1, int idx2) {
-        if (idx1 != idx2) {
-            arr[idx1] = arr[idx2] - arr[idx1];
-            arr[idx2] = arr[idx2] - arr[idx1];
-            arr[idx1] = arr[idx2] + arr[idx1];
-        }
-		// int tmp = arr[idx1];
-		// arr[idx1] = arr[idx2];
-		// arr[idx2] = tmp;
+		int tmp = arr[idx1];
+		arr[idx1] = arr[idx2];
+		arr[idx2] = tmp;
 	}
 }
