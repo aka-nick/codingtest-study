@@ -16,11 +16,14 @@ class Solution {
 				swapPointer -= 1;
 			}
 		}
-		
-		while(arr2Pointer >= 0) {
-			nums1[swapPointer] = nums2[arr2Pointer];
-			swapPointer -= 1;
-			arr2Pointer -= 1;
-		}
+        
+		if (arr2Pointer >= 0) {
+            System.arraycopy(nums2, 0, nums1, 0, swapPointer + 1);
+        }
+		// while(arr2Pointer >= 0) {
+		// 	nums1[swapPointer] = nums2[arr2Pointer];
+		// 	swapPointer -= 1;
+		// 	arr2Pointer -= 1;
+		// }
 	}
 }
