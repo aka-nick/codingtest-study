@@ -12,7 +12,7 @@ class Solution {
 					else if (vP(s.substring(i, j), false)) return true;
 					else return false;
 				else
-					return false;
+					return false; 
 		}
 
 		return true;
