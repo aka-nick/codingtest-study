@@ -4,13 +4,9 @@ class Solution {
 			char ic = s.charAt(i);
 			char jc = s.charAt(j);
 
-			if (i == j) return ic == jc;
-
 			if (ic != jc)
 				if (neverPassed)
-					if (vP(s.substring(i + 1, j + 1), false)) return true;
-					else if (vP(s.substring(i, j), false)) return true;
-					else return false;
+					return vP(s.substring(i + 1, j + 1), false) || vP(s.substring(i, j), false);
 				else
 					return false;
 		}
