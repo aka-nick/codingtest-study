@@ -4,6 +4,8 @@ class Solution {
 			char ic = s.charAt(i);
 			char jc = s.charAt(j);
 
+            if (i == j) return ic == jc;
+            
 			if (ic != jc)
 				if (neverPassed)
 					return vP(s.substring(i + 1, j + 1), false) || vP(s.substring(i, j), false);
