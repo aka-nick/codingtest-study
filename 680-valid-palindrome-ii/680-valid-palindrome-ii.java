@@ -8,7 +8,9 @@ class Solution {
             
 			if (ic != jc)
 				if (neverPassed)
-					return vP(s.substring(i + 1, j + 1), false) || vP(s.substring(i, j), false);
+					if (vP(s.substring(i + 1, j + 1), false)) return true;
+					else if (vP(s.substring(i, j), false)) return true;
+					else return false;
 				else
 					return false;
 		}
