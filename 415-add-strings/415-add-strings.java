@@ -1,5 +1,5 @@
 class Solution {
-    public String addStrings(String num1, String num2) {
+    public String addStrings(String num1, String num2) {//602
 		
 		char[] a = num1.length() < num2.length() ? num1.toCharArray() : num2.toCharArray();
 		char[] b = num1.length() < num2.length() ? num2.toCharArray() : num1.toCharArray();
@@ -7,23 +7,25 @@ class Solution {
 		int r = 0;
 
 		for (int i = b.length - 1; i >= 0; i -= 1) {	
+			int bi = Character.getNumericValue(b[i]);
 			if (i >= diff) {
-				if ((b[i] - 48) + (a[i - diff] - 48) + r > 9) {
-					b[i] = (char) (((b[i] - 48) + (a[i - diff] - 48) + r) % 10 + '0');
+				int ai = Character.getNumericValue(a[i - diff]);
+				if (bi + ai + r > 9) {
+					b[i] = (char) (((bi + ai + r) % 10) + '0');
 					r = 1;
 				}
 				else {
-					b[i] = (char)(b[i] - 48 + a[i - diff] - 48 + r + '0');
+					b[i] = (char)((bi + ai + r) + '0');
 					r = 0;
 				}
 			}
 			else {
-				if ((b[i] + r - 48 + 0) > 9) {
-					b[i]  = (char)((b[i] + r - 48 + 0) % 10 + '0');
+				if ((bi + r) > 9) {
+					b[i]  = (char)(((bi + r) % 10) + '0');
 					r = 1;
 				}
-				else {					
-					b[i] = (char)(b[i] + r - 48 + '0');
+				else {
+					b[i] = (char)(b[i] + r); // (Character.forDigit(bi, 10) + r)
 					r = 0;
 				}
 			}
