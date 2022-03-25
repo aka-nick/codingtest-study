@@ -11,21 +11,21 @@ class Solution {
 			if (i >= diff) {
 				int ai = Character.getNumericValue(a[i - diff]);
 				if (bi + ai + r > 9) {
-					b[i] = (char) (((bi + ai + r) % 10) + '0');
+					b[i] = Character.forDigit(((bi + ai + r) % 10), 10);
 					r = 1;
 				}
 				else {
-					b[i] = (char)((bi + ai + r) + '0');
+					b[i] = Character.forDigit((bi + ai + r), 10);
 					r = 0;
 				}
 			}
 			else {
 				if ((bi + r) > 9) {
-					b[i]  = (char)(((bi + r) % 10) + '0');
+					b[i]  = Character.forDigit(((bi + r) % 10), 10);
 					r = 1;
 				}
 				else {
-					b[i] = (char)(b[i] + r); // (Character.forDigit(bi, 10) + r)
+					b[i] = Character.forDigit(bi + r, 10);
 					r = 0;
 				}
 			}
