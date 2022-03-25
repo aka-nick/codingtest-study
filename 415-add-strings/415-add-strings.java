@@ -3,13 +3,12 @@ class Solution {
 		
 		char[] a = num1.length() < num2.length() ? num1.toCharArray() : num2.toCharArray();
 		char[] b = num1.length() < num2.length() ? num2.toCharArray() : num1.toCharArray();
-		int diff = b.length - a.length;
 		int r = 0;
 
 		for (int i = b.length - 1; i >= 0; i -= 1) {	
 			int bi = Character.getNumericValue(b[i]);
-			if (i >= diff) {
-				int ai = Character.getNumericValue(a[i - diff]);
+			if (i >= b.length - a.length) {
+				int ai = Character.getNumericValue(a[i - (b.length - a.length)]);
 				if (bi + ai + r > 9) {
 					b[i] = Character.forDigit(((bi + ai + r) % 10), 10);
 					r = 1;
