@@ -4,7 +4,6 @@ class Solution {
 		int[][] charCnts = new int[chars.length][2]; // { {charNum, cnt}, ...}
 		
 		int cursor = 0;
-		
 		for (int charIdx = 0; charIdx < chars.length; charIdx++, cursor++) {
 			
 			int cNum = chars[charIdx];
