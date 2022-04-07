@@ -7,7 +7,6 @@ class Solution {
 		for (int charIdx = 0; charIdx < chars.length; charIdx++, cursor++) {
 			
 			int cNum = chars[charIdx];
-			
 			if (cursor == 0) 
 				charCnts[cursor] = new int[]{cNum, 1};
 			else if (charCnts[cursor - 1][0] == cNum)
