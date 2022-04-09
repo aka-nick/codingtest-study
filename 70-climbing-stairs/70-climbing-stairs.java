@@ -4,14 +4,15 @@ class Solution {
 		if (n == 1) return 1;
 		else if (n == 2) return 2;
 		
-		int[] dArr = new int[n + 1];
-		dArr[1] = 1;
-		dArr[2] = 2;
+		int dn, d1 = 1, d2 = 2;
 		
-		for (int i = 3; i <= n; i += 1) 
-			dArr[i] = dArr[i - 2] + dArr[i - 1];
+		for (int i = 3; i <= n; i += 1) {
+			dn = d1 + d2;
+			d1 = d2;
+			d2 = dn;
+		}
 		
-		return dArr[n];
+		return d2;
 		
 	}
 }
