@@ -1,7 +1,7 @@
 class Solution {
     public int solution(String s) {
         int resultLength = s.length();
-
+ 
         for (int i = 1; i <= s.length() / 2; i++) { // 기준문자열의 길이를 늘려나가기 위한 loop
             int pos = 0; // (기준/비교)문자열의 시작 위치
             int compressLength = s.length();
