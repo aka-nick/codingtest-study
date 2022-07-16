@@ -1,82 +1,56 @@
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 class Solution {
-	
-    // 양손구락 위치 번호
-    private int nowLeftThumb = 10;
-    private int nowRightThumb = 12;
     
-    // 리턴값 담을 문자열
-    private String retVal = "";
-	
-	public String solution(int[] numbers, String hand) {
+    int nowLeftPosition = 10;
+    int nowRightPosition = 12;
+    
+    public String solution(int[] numbers, String hand) {
+        StringBuilder record = new StringBuilder();
 
-        // 번호별 키패드 좌표
-        Map<Integer, Integer[]> keypad = new HashMap<Integer, Integer[]>();
-        keypad.put(1, new Integer[] {0, 0});
-        keypad.put(2, new Integer[] {1, 0});
-        keypad.put(3, new Integer[] {2, 0});
-        
-        keypad.put(4, new Integer[] {0, 1});
-        keypad.put(5, new Integer[] {1, 1});
-        keypad.put(6, new Integer[] {2, 1});
-        
-        keypad.put(7, new Integer[] {0, 2});
-        keypad.put(8, new Integer[] {1, 2});
-        keypad.put(9, new Integer[] {2, 2});
-        
-        keypad.put(10, new Integer[] {0, 3});
-        keypad.put(0 , new Integer[] {1, 3});
-        keypad.put(12, new Integer[] {2, 3});
-        
-        // 탐색
-        for (int num : numbers) {
-    		if (num == 1 || num == 4 || num == 7) { //왼손 쓸 버튼
-        		keyPress("left", num);
-        		continue;
-        	}
-        	else if (num == 3 || num == 6 || num ==9) { //오른손 쓸 버튼
-        		keyPress("right", num);
-        		continue;
-        	}
-        	else { //아리까리 버튼: 중간열 버튼 -> 양손 위치와 해당 패드 간의 차이 계산
-        		int xDiffLeft = Math.abs(keypad.get(num)[0] - keypad.get(nowLeftThumb)[0]); 
-        		int yDiffLeft = Math.abs(keypad.get(num)[1] - keypad.get(nowLeftThumb)[1]); 
-        		int xDiffRight = Math.abs(keypad.get(num)[0] - keypad.get(nowRightThumb)[0]);
-        		int yDiffRight = Math.abs(keypad.get(num)[1] - keypad.get(nowRightThumb)[1]);
-        		
-        		// 버튼과 왼손/오른손 간 차이 중에서...
-        		if (xDiffLeft + yDiffLeft < xDiffRight + yDiffRight) { // 왼손과의 차이가 더 작은 경우 -> 왼손 쓴다
-            		keyPress("left", num);
-            		continue;
-        		}
-        		else if (xDiffLeft + yDiffLeft > xDiffRight + yDiffRight) { // 오른손과의 차이가 더 작은 경우 -> 오른손 쓴다
-            		keyPress("right", num);
-            		continue;
-        		}
-        		else { // 같은 경우
-        			// 어느손잡이인지에 따라 누른다
-        			keyPress(hand, num);
-        			continue;
-        			
-        		}
-        	}
+        Map<Integer, int[]> keypadMap = new HashMap<>();
+        keypadMap.put(1, new int[]{0, 0});
+        keypadMap.put(2, new int[]{1, 0});
+        keypadMap.put(3, new int[]{2, 0});
+        keypadMap.put(4, new int[]{0, 1});
+        keypadMap.put(5, new int[]{1, 1});
+        keypadMap.put(6, new int[]{2, 1});
+        keypadMap.put(7, new int[]{0, 2});
+        keypadMap.put(8, new int[]{1, 2});
+        keypadMap.put(9, new int[]{2, 2});
+        keypadMap.put(10, new int[]{0, 3});
+        keypadMap.put(0, new int[]{1, 3});
+        keypadMap.put(12, new int[]{2, 3});
+
+        for (int number : numbers) {
+            switch (number) {
+                case 1: case 4: case 7: keyPress("L", number, record); break;
+                case 3: case 6: case 9: keyPress("R", number, record); break;
+                default: {
+                    int diffL = Math.abs(keypadMap.get(number)[0] - keypadMap.get(nowLeftPosition)[0])
+                            + Math.abs(keypadMap.get(number)[1] - keypadMap.get(nowLeftPosition)[1]);
+                    int diffR = Math.abs(keypadMap.get(number)[0] - keypadMap.get(nowRightPosition)[0])
+                            + Math.abs(keypadMap.get(number)[1] - keypadMap.get(nowRightPosition)[1]);
+
+                    if(diffL < diffR)
+                        keyPress("L", number, record);
+                    else if (diffR < diffL)
+                        keyPress("R", number, record);
+                    else // diffL == diffR
+                        keyPress("left".equals(hand) ? "L" : "R", number, record);
+                }
+            }
         }
-        
-        return this.retVal;
 
+        return record.toString();
     }
-	
-	private void keyPress(String leftOrRight, int pressNum) {
-		if ("left".equals(leftOrRight)) {
-			this.retVal += "L";
-    		this.nowLeftThumb = pressNum;
-		}
-		else if ("right".equals(leftOrRight)) {
-			this.retVal += "R";
-    		this.nowRightThumb = pressNum;
-		}
-	}
     
+    void keyPress(String pressHand, int pressNum, StringBuilder record) {
+        record.append(pressHand);
+
+        if ("L".equals(pressHand))
+            this.nowLeftPosition = pressNum;
+        else
+            this.nowRightPosition = pressNum;
+    }
 }
