@@ -22,10 +22,9 @@ public class Main {
         int result = 0;
         for (int i = list.size() - 1; 0 <= i; i--) {
             Integer nowToken = list.get(i);
-            while (nowToken <= k) {
-                k -= nowToken;
-                result++;
-            }
+
+            result += k / nowToken;
+            k = k % nowToken;
         }
 
         System.out.println(result);
