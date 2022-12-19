@@ -7,6 +7,6 @@ class Solution {
             a = b;
             b = fibo % 1234567;
         }
-        return Long.valueOf(b % 1234567).intValue();
+        return Long.valueOf(b).intValue();
     }
 }
