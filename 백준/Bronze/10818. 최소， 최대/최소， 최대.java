@@ -1,19 +1,23 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Main {
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-		int n = sc.nextInt();
-		int min = Integer.MAX_VALUE;
-		int max = Integer.MIN_VALUE;
-		
-		for (int i = 0; i < n; i += 1) {
-			int num = Integer.parseInt(sc.next());
-			if (min > num) min = num;
-			if (max < num) max = num;
-		}
-		
-		sc.close();
-		System.out.printf("%d %d", min, max);
-	}
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine());
+        int max = Integer.MIN_VALUE;
+        int min = Integer.MAX_VALUE;
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        br.close();
+        for (int i = 0; i < n; i++) {
+            int now = Integer.parseInt(st.nextToken());
+            max = Math.max(max, now);
+            min = Math.min(min, now);
+        }
+        System.out.println(min + " " + max);
+    }
+
 }
