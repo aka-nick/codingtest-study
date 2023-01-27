@@ -1,42 +1,46 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
-	
-	static int n = 0;
-	static int s = 0;
-	static int[] arr;
-	static int sum = 0;
-	static int count = 0;
-	
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-		n = sc.nextInt();
-		s = sc.nextInt();
-		sc.nextLine();
-		arr = new int[n];
-		StringTokenizer st = new StringTokenizer(sc.nextLine());
-		for (int i = 0; st.hasMoreTokens(); i++) {
-			arr[i] = Integer.parseInt(st.nextToken());
-		}
-		
-		perm(0, 0);
-		
-		System.out.println(count);
-	}
-	
-	private static void perm(int depth, int start) {
-		if (depth == n) {
-			return;
-		}
-		
-		for (int i = start; i < n; i++) {
-			sum += arr[i];
-			if (sum == s) count++;
-			
-			perm(depth + 1, i + 1);
-			
-			sum -= arr[i];
-		}
-	}
+
+    private static int count = 0;
+    private static int[] arr;
+    private static int n;
+    private static int s;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        s = Integer.parseInt(st.nextToken());
+        arr = new int[n];
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < n; i++) {
+            arr[i] = Integer.parseInt(st.nextToken());
+        }
+        br.close();
+
+        summation(0, 0);
+
+        if (s == 0) {
+            count--;
+        }
+
+        System.out.println(count);
+    }
+
+    private static void summation(int idx, int sum) {
+        if (idx == n) {
+            if (sum == s) {
+                count++;
+            }
+            return;
+        }
+
+        summation(idx + 1, sum + arr[idx]);
+        summation(idx + 1, sum);
+    }
+
 }
