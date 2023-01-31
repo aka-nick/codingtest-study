@@ -4,37 +4,36 @@ import java.io.InputStreamReader;
 
 public class Main {
 
-    static int[] stairs;
-    static Integer[] mem;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine());
-        stairs = new int[n + 1];
-        mem = new Integer[n + 1];
-
+        int[] v = new int[n + 3];
         for (int i = 1; i <= n; i++) {
-            stairs[i] = Integer.parseInt(br.readLine());
+            v[i] = Integer.parseInt(br.readLine());
         }
+
+        int[] f = new int[n + 3];
+        setBaseCase(n, v, f);
+
+        bottomUp(n, v, f);
+
         br.close();
+        System.out.println(f[n]);
+    }
 
-        mem[0] = stairs[0];
-        mem[1] = stairs[1];
+    private static void bottomUp(int n, int[] v, int[] f) {
+        for (int i = 3; i <= n; i++) {
+            f[i] = Math.max(v[i - 1] + f[i - 3], f[i - 2]) + v[i];
+        }
+    }
+
+    private static void setBaseCase(int n, int[] v, int[] f) {
+        f[0] = 0;
+        f[1] = v[1];
+
         if (2 <= n) {
-            mem[2] = stairs[2] + stairs[1];
+            f[2] = v[1] + v[2];
         }
-
-        System.out.println(f(n));
     }
-
-    static int f(int n) {
-
-        if (mem[n] == null) {
-            mem[n] = Math.max(
-                    f(n - 3) + stairs[n - 1],
-                    f(n - 2)
-            ) + stairs[n];
-        }
-
-        return mem[n];
-    }
+    
 }
