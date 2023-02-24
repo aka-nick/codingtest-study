@@ -6,54 +6,62 @@ import java.util.StringTokenizer;
 
 public class Main {
 
+    private static int[] houses;
+    private static int left;
+    private static int right;
+    private static int n;
+    private static int c;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
-        int n = Integer.parseInt(st.nextToken());
-        int c = Integer.parseInt(st.nextToken());
-        int[] arr = new int[n];
+
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        c = Integer.parseInt(st.nextToken());
+
+        houses = new int[n];
         for (int i = 0; i < n; i++) {
-            arr[i] = Integer.parseInt(br.readLine());
+            houses[i] = Integer.parseInt(br.readLine());
         }
         br.close();
-        Arrays.sort(arr);
+        Arrays.sort(houses);
+        int min = houses[0];
+        int max = houses[n - 1];
 
-        int l = 1; // 최소로 가질 수 있는 거리
-        int r = arr[arr.length - 1] - arr[0]; //최대로 가질 수 있는 거리
-        /*
-            위 l/r을 기준으로, 가질 수 있는 거리를 이분탐색한다. (탐색위치는 대충 x라 하자)
-            좀 더 구체적으로 말해서, 지금 하고 싶은 건, 설치가 가능하면서도 가장 큰 거리 찾기 & 불가능한건 가능한 빠르게 제끼기.
-            위의 요구사항을 감안해서 실행 계획을 짜보자.
+        left = 1;
+        right = max - min;
+        int mid = 0;
 
-            탐색위치에서 c개만큼 설치가 가능한지,
-                가능하다면 -> l = 가능했던 위치 + 1; //가능한 위치를 하나씩 올릴거야, 불가능할 때까지 / '불가능해지는 위치 - 1' = '가능한 최대 간격')
-                불가능하다면 -> r = 불가능했던 위치; //불가능했던 위치는 더 고려할 필요가 없다 && l이 r(불가능해지는 위치)까지 올라오는 시점을 체크할 용도
-        */
-        while (l < r) {
-            int x = (r + l) / 2;
+        while (left <= right) {
 
-            if (canInstall(arr, x, c)) { // 설치가 가능한지 : 가능
-                l = x + 1;
+            mid = ((right - left) / 2) + left;
+
+            if (canInstall(mid)) {
+                left = mid + 1;
             }
-            else { // 설치가 불가능
-                r = x;
+            else {
+                if (right <= mid) break;
+                right = mid;
             }
         }
 
-        System.out.println(c == 2 ? l : l - 1); // (불가능해지는 간격 - 1) => 가능한 최대 간격
+        System.out.println(left - 1);
     }
 
-    private static boolean canInstall(int[] arr, int x, int c) {
-        int count = 1; //처음 한 개는 무조건 설치
-        int installed = arr[0];
-        for (int i = 1; i < arr.length; i++) {
-            if (installed + x <= arr[i]) {
-                installed = arr[i];
+    private static boolean canInstall(int mid) {
+        /*
+        '최소요소(or 현재설치위치값) + p' 이상인 위치가 house에 존재하는지, 존재할 때마다 count.
+        c <= count이면, return true. 아니면 false.
+         */
+        int count = 1;
+        int now = houses[0];
+        for (int i = 1; i < houses.length; i++) {
+            if (now + mid <= houses[i]) {
                 count++;
+                now = houses[i];
             }
             if (count == c) return true;
         }
         return false;
     }
-
 }
