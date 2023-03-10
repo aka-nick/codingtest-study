@@ -1,7 +1,7 @@
 import java.util.*;
 
 class Solution {
-    public int[] solution(String msg) {
+    public Integer[] solution(String msg) {
 
         List<Integer> answer = new ArrayList<>();
         String input = new String(msg);
@@ -9,8 +9,6 @@ class Solution {
         for (int i = 0; i < input.length(); i++) {
             dict.put(String.valueOf(input.charAt(i)), input.charAt(i)-'A' + 1);
         }
-
-
 
         int idx = 27;
 
@@ -42,11 +40,6 @@ class Solution {
             input = input.substring(findIdx);
         }
 
-        int[] result = new int[answer.size()];
-        for (int i = 0; i < result.length; i++) {
-            result[i] = answer.get(i);
-        }
-
-        return result;
+        return answer.stream().toArray(Integer[]::new);
     }
 }
