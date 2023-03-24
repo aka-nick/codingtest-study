@@ -11,7 +11,6 @@ class Solution {
             }
         }
 
-//            testPrint(matrix);
         int[] result = new int[queries.length];
         for (int i = 0; i < queries.length; i++) {
             // 시작좌표, 끝좌표 획득
@@ -29,16 +28,14 @@ class Solution {
 
     private int rotate(int[][] matrix, int startX, int startY, int endX, int endY) {
         // 회전 로직 구현부
-        int tmp1 = 0; // 뽑은거
-        int tmp2 = 0; // 뽑을거 (뽑은걸 꽂을 곳의 숫자)
         // 먼저 맨윗줄을 옮긴다고 해보자 : startX, startY =(y + 1)=> startX, endY
         int x = startX;
         int y = startY;
         int min = matrix[x][y];
-        for (; y < endY; y++) {
-            // 최초 뽑기
-            if (tmp1 == 0) tmp1 = matrix[x][y];
+        int tmp1 = matrix[x][y]; // 뽑은거
+        int tmp2 = 0; // 뽑을거 (뽑은걸 꽂을 곳의 숫자)
 
+        for (; y < endY; y++) {
             // 꽂기
             tmp2 = matrix[x][y + 1];
             matrix[x][y + 1] = tmp1;
@@ -75,7 +72,6 @@ class Solution {
             // 꽂기
             tmp2 = matrix[x][y - 1];
             matrix[x][y - 1] = tmp1;
-//                    System.out.println(tmp2 + " : " + tmp1);
 
             // 뽑기
             tmp1 = tmp2;
@@ -83,8 +79,6 @@ class Solution {
             // 최소 체크
             min = Math.min(min, tmp1);
         }
-//                System.out.println("tmp1 = " + tmp1);
-//                System.out.println("tmp2 = " + tmp2);
 
         // 마지막은 왼쪽 아래에서 왼쪽 위로 : endX, startY =(x - 1)=> startX, startY
         x = endX;
@@ -95,7 +89,6 @@ class Solution {
             // 꽂기
             tmp2 = matrix[x - 1][y];
             matrix[x - 1][y] = tmp1;
-//                    System.out.println(tmp2 + " : " + tmp1);
 
             // 뽑기
             tmp1 = tmp2;
@@ -106,15 +99,5 @@ class Solution {
 
         return min;
     }
-
-    private void testPrint(int[][] matrix) {
-        System.out.println("++++++++++");
-        for (int[] ints : matrix) {
-            for (int anInt : ints) {
-                System.out.print("\t" + anInt + " ");
-            }
-            System.out.println();
-        }
-        System.out.println("++++++++++");
-    }
+    
 }
