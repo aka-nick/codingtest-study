@@ -3,51 +3,37 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.List;
 import java.util.StringTokenizer;
 
-
 public class Main {
 
-    private static final int NO_ENTRY = Integer.MIN_VALUE;
-    private static final int ENTRY = Integer.MAX_VALUE;
     private static final char WALL = '#';
+    private static final int WALL_VALUE = -1;
     private static final char JIHUN = 'J';
     private static final char FIRE = 'F';
+    private static final String IMPOSSIBLE = "IMPOSSIBLE";
 
     public static void main(String[] args) throws IOException {
+        // init
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         int n = Integer.parseInt(st.nextToken());
         int m = Integer.parseInt(st.nextToken());
-
-        int[] jihunPos = {};
-        List<int[]> firePosList = new ArrayList<>();
-        boolean[][] fireVisited = new boolean[n][m];
-        boolean[][] jihunVisited = new boolean[n][m];
-        int[][] fireMap = new int[n][m];
-
+        int[][] map = new int[n][m];
+        List<Position> fireStarting = new ArrayList<>();
+        Position jihunStarting = null;
         for (int i = 0; i < n; i++) {
             char[] chars = br.readLine().toCharArray();
-            if (chars.length == 0) {
-                i--;
-                continue;
-            }
             for (int j = 0; j < m; j++) {
-                char c = chars[j];
-
-                if (c == WALL) {
-                    fireMap[i][j] = NO_ENTRY;
-                    fireVisited[i][j] = true;
-                    jihunVisited[i][j] = true;
-                } else if (c == JIHUN) {
-                    jihunPos = new int[]{i, j};
-                    fireMap[i][j] = ENTRY;
-                } else if (c == FIRE) {
-                    firePosList.add(new int[]{i, j});
-                } else {
-                    fireMap[i][j] = ENTRY;
+                if (chars[j] == FIRE) {
+                    fireStarting.add(new Position(i, j));
+                } else if (chars[j] == JIHUN) {
+                    jihunStarting = new Position(i, j);
+                } else if (chars[j] == WALL) {
+                    map[i][j] = WALL_VALUE;
                 }
             }
         }
@@ -55,79 +41,82 @@ public class Main {
 
         int[] dx = {1, 0, -1, 0};
         int[] dy = {0, 1, 0, -1};
-        Deque<int[]> q = new ArrayDeque<>();
+        Deque<Position> q = new ArrayDeque<>();
 
-        // 불 탐색
-        int time = 0;
-        for (int[] pos : firePosList) {
+        // fire run
+        boolean[][] fireVisited = new boolean[n][m];
+        int fireStep = 1;
+        for (Position pos : fireStarting) {
             q.addLast(pos);
-            fireVisited[pos[0]][pos[1]] = true;
+            map[pos.x][pos.y] = fireStep;
+            fireVisited[pos.x][pos.y] = true;
         }
+
         while (!q.isEmpty()) {
             int size = q.size();
-            time++;
-
-            while (0 < size--) {
-                int[] pos = q.pollFirst();
-
+            fireStep++;
+            while (size-- > 0) {
+                Position now = q.pollFirst();
                 for (int i = 0; i < 4; i++) {
-                    int nx = pos[0] - dx[i];
-                    int ny = pos[1] - dy[i];
+                    int nx = now.x + dx[i];
+                    int ny = now.y + dy[i];
+                    if (nx < 0 || ny < 0 || n <= nx || m <= ny) continue;
+                    if (fireVisited[nx][ny]) continue;
+                    if (map[nx][ny] != 0 && map[nx][ny] < fireStep) continue;
 
-                    if (nx < 0 || ny < 0 || n <= nx || m <= ny) {
-                        continue;
-                    }
-
-                    if (!fireVisited[nx][ny] &&  time < fireMap[nx][ny]) {
-                        q.addLast(new int[]{nx, ny});
-                        fireVisited[nx][ny] = true;
-                        fireMap[nx][ny] = time;
-                    }
+                    map[nx][ny] = fireStep;
+                    q.addLast(new Position(nx, ny));
+                    fireVisited[nx][ny] = true;
                 }
             }
         }
 
-        // 지훈이 탐색
-        time = 0;
-        int x = jihunPos[0];
-        int y = jihunPos[1];
-        if (0 < fireMap[x][y]) {
-            if (x == 0 || y == 0 || x == n - 1 || y == n - 1) {
-                System.out.println(++time);
-                return;
-            }
-            q.addLast(jihunPos);
-            jihunVisited[jihunPos[0]][jihunPos[1]] = true;
+        // jihun run
+        boolean[][] jihunVisited = new boolean[n][m];
+        int jihunStep = 1;
+        q.addLast(jihunStarting);
+        map[jihunStarting.x][jihunStarting.y] = jihunStep;
+        jihunVisited[jihunStarting.x][jihunStarting.y] = true;
+        if (jihunStarting.x == 0 || jihunStarting.y == 0 || n - 1 == jihunStarting.x || m - 1 == jihunStarting.y) { // 최소사이즈(1) 예외처리
+            System.out.println(jihunStep);
+            return;
         }
 
         while (!q.isEmpty()) {
             int size = q.size();
-            time++;
-
-            while (0 < size--) {
-                int[] pos = q.pollFirst();
-
+            jihunStep++;
+            while (size-- > 0) {
+                Position now = q.pollFirst();
                 for (int i = 0; i < 4; i++) {
-                    int nx = pos[0] - dx[i];
-                    int ny = pos[1] - dy[i];
+                    int nx = now.x + dx[i];
+                    int ny = now.y + dy[i];
 
-                    if (fireMap[nx][ny] != NO_ENTRY &&
-                            time < fireMap[nx][ny] &&
-                            (nx == 0 || ny == 0 || n - 1 == nx || m - 1 == ny)) { // 탈출 성공
-                        System.out.println(++time);
+                    if (jihunVisited[nx][ny]) continue;
+                    if (map[nx][ny] == WALL_VALUE) continue;
+                    if (map[nx][ny] != 0 && map[nx][ny] <= jihunStep) continue;
+
+                    if (nx == 0 || ny == 0 || n - 1 == nx || m - 1 == ny) {
+                        System.out.println(jihunStep);
                         return;
                     }
 
-                    if (!jihunVisited[nx][ny] && time < fireMap[nx][ny]) {
-                        q.addLast(new int[]{nx, ny});
-                        jihunVisited[nx][ny] = true;
-                    }
-
+                    map[nx][ny] = jihunStep;
+                    q.addLast(new Position(nx, ny));
+                    jihunVisited[nx][ny] = true;
                 }
             }
         }
 
-        System.out.println("IMPOSSIBLE");
+        System.out.println(IMPOSSIBLE);
     }
 
+    static class Position {
+        int x;
+        int y;
+
+        public Position(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
 }
