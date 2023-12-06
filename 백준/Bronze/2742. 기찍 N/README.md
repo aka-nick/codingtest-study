@@ -1,4 +1,4 @@
-# [Bronze III] 기찍 N - 2742 
+# [Bronze IV] 기찍 N - 2742 
 
 [문제 링크](https://www.acmicpc.net/problem/2742) 
 
@@ -8,7 +8,11 @@
 
 ### 분류
 
-구현(implementation)
+구현
+
+### 제출 일자
+
+2022년 3월 16일 12:39:19
 
 ### 문제 설명
 
