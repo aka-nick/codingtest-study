@@ -7,12 +7,13 @@ public class Main {
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         int t = Integer.parseInt(br.readLine());
         while (t-- > 0) {
-            String[] numbers = br.readLine().split(" ");
-            int a = Integer.parseInt(numbers[0]);
-            int b = Integer.parseInt(numbers[1]);
+            String[] ab = br.readLine().split(" ");
+            int a = Integer.parseInt(ab[0]);
+            int b = Integer.parseInt(ab[1]);
             bw.write(a + b + System.lineSeparator());
         }
         br.close();
+        bw.flush();
         bw.close();
     }
 
