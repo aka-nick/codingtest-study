@@ -1,21 +1,20 @@
-import java.util.Scanner;
+import java.io.*;
 
 public class Main {
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-		String line = sc.nextLine();
-		StringBuffer sb = new StringBuffer();
-		int unitLength = 10;
 
-		for (int i = 0; i < line.length(); i += unitLength) {
-			if (i + unitLength > line.length()) {				
-				sb.append(line.substring(i));
-				break;
-			}
-			sb.append(line.substring(i, i + unitLength)).append("\n");
-		}
-		
-		sc.close();
-		System.out.print(sb.toString());
-	}
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder result = new StringBuilder();
+        char[] chars = br.readLine().toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            result.append(chars[i]);
+            if ((i + 1) % 10 == 0) {
+                result.append(System.lineSeparator());
+            }
+        }
+        br.close();
+
+        System.out.println(result);
+    }
+
 }
