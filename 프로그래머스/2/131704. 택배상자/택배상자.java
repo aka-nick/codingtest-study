@@ -4,18 +4,19 @@ class Solution {
 
     public int solution(int[] order) {
         Stack<Integer> stash = new Stack<>();
-        List<Integer> loads = new ArrayList<>();
+        int loadCount = 0;
         int orderIdx = 0;
         
         for (int item = 1; item <= order.length; item++) {
             boolean isLoad = false;
             if (item == order[orderIdx]) {
-                loads.add(item);
+                loadCount++;
                 orderIdx++;
                 isLoad = true;
             }
             while (!stash.isEmpty() && stash.peek() == order[orderIdx]) {
-                loads.add(stash.pop());
+                stash.pop();
+                loadCount++;
                 orderIdx++;
                 isLoad = true;
             }
@@ -24,7 +25,7 @@ class Solution {
             }
         }
         
-        return loads.size();
+        return loadCount;
     }
     
 }
