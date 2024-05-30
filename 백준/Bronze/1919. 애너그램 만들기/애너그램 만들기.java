@@ -6,31 +6,29 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        char[] word1 = br.readLine().toCharArray();
-        char[] word2 = br.readLine().toCharArray();
+        char[] input1 = br.readLine().toCharArray();
+        char[] input2 = br.readLine().toCharArray();
         br.close();
-
-        int[] count1 = getIntArray(word1);
-        int[] count2 = getIntArray(word2);
-
-        int diffSum = 0;
-        for (int i = 0; i < 26; i++) {
-            diffSum += Math.abs(count1[i] - count2[i]);
+        int[] arr1 = new int[26];
+        int[] arr2 = new int[26];
+        for (char c : input1) {
+            arr1[c - 'a']++;
         }
 
-        System.out.println(diffSum);
-    }
-
-    private static int[] getIntArray(char[] word) {
-        int[] result = new int[26];
-        for (int i = 0; i < word.length; i++) {
-            result[getAnInt(word[i])]++;
+        for (char c : input2) {
+            if (0 < arr1[c - 'a']) arr1[c - 'a']--;
+            else arr2[c - 'a']++;
         }
-        return result;
-    }
 
-    private static int getAnInt(char word) {
-        return word - 'a';
+        int result = 0;
+        for (int i : arr1) {
+            result += i;
+        }
+        for (int i : arr2) {
+            result += i;
+        }
+
+        System.out.println(result);
     }
 
 }
