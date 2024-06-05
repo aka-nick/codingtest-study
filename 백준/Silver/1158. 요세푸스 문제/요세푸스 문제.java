@@ -1,51 +1,45 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ListIterator;
-import java.util.StringTokenizer;
-import java.util.stream.Collectors;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.IntStream;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        int n = Integer.parseInt(st.nextToken());
-        int k = Integer.parseInt(st.nextToken());
+        String[] split = br.readLine().split(" ");
+        int n = Integer.parseInt(split[0]);
+        int k = Integer.parseInt(split[1]);
         br.close();
 
-        ListIterator<Integer> numbers = IntStream.rangeClosed(1, n)
-                .boxed()
-                .collect(Collectors.toList())
-                .listIterator(0);
+        List<Integer> y = new LinkedList<>();
+        IntStream.rangeClosed(1, n).forEach(y::add);
+        StringBuilder result = new StringBuilder();
 
-        StringBuilder result = new StringBuilder("<");
-        int compareCount = 0;
-        while (numbers.hasNext()) {
-            // k번 만큼 next()
-            compareCount++;
-            if (compareCount < k) {
-                numbers.next();
-            }
+        int idx = 0;
+        int count = 0;
+        while (!y.isEmpty()) {
+            count++;
 
-            // k번째에는 remove를 실행해준다. 지워지는 녀석들은 수열에 기록.
-            else if (compareCount == k) {
-                result.append(numbers.next()).append(", ");
-                numbers.remove();
-                compareCount = 0;
-            }
-
-            // hasNext()가 false면 0으로 돌려놓는다
-            if (!numbers.hasNext()) {
-                while (numbers.hasPrevious()) {
-                    numbers.previous();
+            if (count == k) {
+                result.append(y.remove(idx));
+                if (!y.isEmpty()) {
+                    result.append(", ");
                 }
+                count = 0;
+                idx--;
+            }
+
+            idx++;
+
+            if (y.size() <= idx) {
+                idx = 0;
             }
         }
-        result.replace(result.length() - 2, result.length(), ">");
 
-        System.out.println(result);
+        System.out.println(result.append(">").insert(0, "<"));
     }
 
 }
