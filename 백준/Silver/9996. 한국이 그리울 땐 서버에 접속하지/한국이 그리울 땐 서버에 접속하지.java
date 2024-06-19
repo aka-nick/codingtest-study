@@ -7,11 +7,14 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine());
-        String reg = br.readLine().replace("*", ".*");
+        String[] line = br.readLine().replace("*", " ").split(" ");
         StringBuilder result = new StringBuilder();
         while (n-->0) {
+            String ex = br.readLine();
             result
-                    .append(br.readLine().matches(reg) ? "DA" : "NE")
+                    .append(ex.startsWith(line[0])
+                            && ex.endsWith(line[1])
+                            && (line[0].length() + line[1].length()) <= ex.length() ? "DA" : "NE")
                     .append(System.lineSeparator());
         }
         br.close();
