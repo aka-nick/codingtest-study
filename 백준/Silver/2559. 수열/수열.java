@@ -14,16 +14,17 @@ public class Main {
                 .mapToInt(Integer::parseInt)
                 .toArray();
         br.close();
-        int[] arr = new int[n];
-        int max = Integer.MIN_VALUE;
-        for (int i = 0; i < n - k + 1; i++) {
-            int sum = temps[i];
-            for (int j = i + 1; j < i + k; j++) {
-                sum += temps[j];
-            }
-            arr[i] = sum;
-            max = Math.max(sum, max);
+        int sum = 0;
+        for (int i = 0; i < k; i++) {
+            sum += temps[i];
         }
+
+        int max = sum;
+        for (int i = k; i < n; i++) {
+            sum = sum - temps[i - k] + temps[i];
+            max = Math.max(max, sum);
+        }
+
         System.out.println(max);
     }
 
