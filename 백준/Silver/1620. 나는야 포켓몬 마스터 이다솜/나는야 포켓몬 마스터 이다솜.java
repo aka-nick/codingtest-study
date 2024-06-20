@@ -1,44 +1,38 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        int n = Integer.parseInt(st.nextToken());
-        int m = Integer.parseInt(st.nextToken());
-        Map<Integer, String> numberMap = new HashMap<>();
-        Map<String, Integer> nameMap = new HashMap<>();
+        String[] split = br.readLine().split(" ");
+        int n = Integer.parseInt(split[0]);
+        int m = Integer.parseInt(split[1]);
+        
+        HashMap<String, Integer> nameNumber = new HashMap<>();
+        HashMap<Integer, String> numberName = new HashMap<>();
         for (int i = 1; i <= n; i++) {
-            String now = br.readLine();
-            nameMap.put(now, i);
-            numberMap.put(i, now);
+            String name = br.readLine();
+            numberName.put(i, name);
+            nameNumber.put(name, i);
         }
-        List<String> commands = new ArrayList<>();
-        for (int i = 0; i < m; i++) {
-            commands.add(br.readLine());
+
+        StringBuilder result = new StringBuilder();
+        while (m-->0) {
+            String nameOrNumber = br.readLine();
+            char c = nameOrNumber.charAt(0);
+            if (Character.isAlphabetic(c)) {
+                result.append(nameNumber.get(nameOrNumber));
+            } else {
+                result.append(numberName.get(Integer.valueOf(nameOrNumber)));
+            }
+            result.append(System.lineSeparator());
         }
         br.close();
 
-        StringBuilder result = new StringBuilder();
-        for (String command : commands) {
-            if (Character.isAlphabetic(command.charAt(0))) {
-                result.append(nameMap.get(command))
-                        .append(System.lineSeparator());
-            }
-            else {
-                result.append(numberMap.get(Integer.valueOf(command)))
-                        .append(System.lineSeparator());
-            }
-        }
-
         System.out.println(result);
     }
+
 }
