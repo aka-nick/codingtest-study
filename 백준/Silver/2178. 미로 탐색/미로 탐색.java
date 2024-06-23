@@ -1,88 +1,67 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class Main {
-    static int n;
-    static int m;
-    static int[][] maze;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        n = Integer.parseInt(st.nextToken());
-        m = Integer.parseInt(st.nextToken());
-        maze = new int[n][m];
-
-        for (int i = 0; i < n; i++) {
-            String line = br.readLine();
-            if (line == null || line.isEmpty()) break;
-
-            char[] carr = line.toCharArray();
-            for (int j = 0; j < m; j++) {
-                maze[i][j] = carr[j] == '1' ? 1 : 0;
+        String[] split = br.readLine().split(" ");
+        int n = Integer.parseInt(split[0]);
+        int m = Integer.parseInt(split[1]);
+        int[][] map = new int[n + 1][m + 1];
+        for (int i = 1; i <= n; i++) {
+            char[] chars = br.readLine().toCharArray();
+            for (int j = 1; j <= m; j++) {
+                map[i][j] = chars[j - 1] - '0';
             }
         }
         br.close();
 
-        find(0, 0);
-    }
+        int[] dx = {1, 0, -1, 0};
+        int[] dy = {0, 1, 0, -1};
+        boolean[][] visited = new boolean[n + 1][m + 1];
 
-    private static void find(int x, int y) {
-        Queue<Room> bfsQueue = new LinkedList<>();
-        visitNewRoom(bfsQueue, 1, x, y);
+        Deque<int[]> d = new ArrayDeque<>();
+        d.addLast(new int[]{1, 1});
+        visited[1][1] = true;
 
-        while (!bfsQueue.isEmpty()) {
-            Room room = bfsQueue.poll();
-            int nowX = room.getX();
-            int nowY = room.getY();
+        int step = 0;
+        while (!d.isEmpty()) {
+            int size = d.size();
+            step++;
 
-            if (nowX == n - 1 && nowY == m - 1) { // 목적지에 도착했다면
-                System.out.println(room.getStep()); // 현재 step 출력하고 종료.
-                return;
-            }
+            while (size-->0) {
+                int[] now = d.removeFirst();
 
-            if (0 < nowX
-                    && maze[nowX - 1][nowY] == 1) {
-                visitNewRoom(bfsQueue, room.getNextStep(), nowX - 1, nowY);
-            }
-            if (nowX < n - 1
-                    && maze[nowX + 1][nowY] == 1) {
-                visitNewRoom(bfsQueue, room.getNextStep(), nowX + 1, nowY);
-            }
-            if (0 < nowY
-                    && maze[nowX][nowY - 1] == 1) {
-                visitNewRoom(bfsQueue, room.getNextStep(), nowX, nowY - 1);
-            }
-            if (nowY < m - 1
-                    && maze[nowX][nowY + 1] == 1) {
-                visitNewRoom(bfsQueue, room.getNextStep(), nowX, nowY + 1);
-            }
+                for (int i = 0; i < 4; i++) {
+                    int nextX = now[0] - dx[i];
+                    int nextY = now[1] - dy[i];
 
+                    if (nextX < 1 || nextY < 1 || n < nextX || m < nextY) {
+                        continue;
+                    }
+                    if (visited[nextX][nextY]) {
+                        continue;
+                    }
+                    if (map[nextX][nextY] == 0) {
+                        continue;
+                    }
+
+                    if (nextX == n && nextY == m) {
+                        // 종료조건
+                        visited[nextX][nextY] = true;
+                        System.out.println(step + 1);
+                        return;
+                    }
+
+                    d.addLast(new int[]{nextX, nextY});
+                    visited[nextX][nextY] = true;
+                }
+            }
         }
     }
-
-    private static void visitNewRoom(Queue<Room> bfsQueue, int room, int nowX, int nowY) {
-        bfsQueue.add(new Room(room, nowX, nowY));
-        maze[nowX][nowY]++;
-    }
-
-}
-class Room {
-    private final int posStep;
-    private final int posX;
-    private final int posY;
     
-    public Room(int step, int x, int y) {
-        posStep = step;
-        posX = x;
-        posY = y;
-    }
-    public int getX() { return posX; }
-    public int getY() { return posY; }
-    public int getStep() { return posStep; }
-    public int getNextStep() { return posStep + 1; }
 }
