@@ -1,74 +1,64 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class Main {
 
-    static int n;
-    static int m;
-    static int v;
-    static boolean[][] adjacencyMatrix;
-    static boolean[] visited;
-    static StringBuffer visitString;
+    private static boolean[] visited;
+    private static boolean[][] graph;
+    private static int n;
+    private static int m;
+    private static int v;
+    private static StringBuilder result;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        n = Integer.parseInt(st.nextToken());
-        m = Integer.parseInt(st.nextToken());
-        v = Integer.parseInt(st.nextToken());
-        adjacencyMatrix = new boolean[n + 1][n + 1];
-
-        String line = br.readLine();;
-        while (line != null) {
-            String[] l = line.split(" ");
-            int i = Integer.parseInt(l[0]);
-            int j = Integer.parseInt(l[1]);
-            adjacencyMatrix[i][j] = true;
-            adjacencyMatrix[j][i] = true;
-            line = br.readLine();
+        String[] split = br.readLine().split(" ");
+        n = Integer.parseInt(split[0]);
+        m = Integer.parseInt(split[1]);
+        v = Integer.parseInt(split[2]);
+        graph = new boolean[n + 1][n + 1];
+        while (m-->0) {
+            String[] line = br.readLine().split(" ");
+            graph[Integer.parseInt(line[0])][Integer.parseInt(line[1])] = true;
+            graph[Integer.parseInt(line[1])][Integer.parseInt(line[0])] = true;
         }
         br.close();
 
-        /* dfs 호출 */
-        visitString = new StringBuffer();
-        visitString.append(v).append(" ");
+        result = new StringBuilder();
+
         visited = new boolean[n + 1];
         visited[v] = true;
+        result.append(v).append(" ");
         dfs(v);
-        System.out.println(visitString.toString());
 
-        /* bfs 호출 */
-        visitString = new StringBuffer();
-        visitString.append(v).append(" ");
+        result.append(System.lineSeparator());
+
         visited = new boolean[n + 1];
         visited[v] = true;
-        bfs(v);
-        System.out.println(visitString.toString());
-    }
-
-    private static void bfs(int v) {
-        Queue<Integer> bfsQueue = new LinkedList<>();
-        bfsQueue.add(v);
-        while (!bfsQueue.isEmpty()) {
-            int nowVertex = bfsQueue.poll();
-            for (int i = 0; i < adjacencyMatrix.length; i++) {
-                if (adjacencyMatrix[nowVertex][i] && !visited[i]) {
-                    visitString.append(i).append(" ");
+        result.append(v).append(" ");
+        Deque<Integer> q = new ArrayDeque<>();
+        q.addLast(v);
+        while (!q.isEmpty()) {
+            Integer now = q.removeFirst();
+            for (int i = 1; i <= n; i++) {
+                if (graph[now][i] && !visited[i]) {
+                    result.append(i).append(" ");
                     visited[i] = true;
-                    bfsQueue.add(i);
+                    q.addLast(i);
                 }
             }
         }
+
+        System.out.println(result);
     }
 
-    private static void dfs(int v) {
-        for (int i = 0; i < adjacencyMatrix.length; i++) {
-            if (adjacencyMatrix[v][i] && !visited[i]) {
-                visitString.append(i).append(" ");
+    static void dfs(int v) {
+        for (int i = 1; i <= n; i++) {
+            if (graph[v][i] && !visited[i]) {
+                result.append(i).append(" ");
                 visited[i] = true;
                 dfs(i);
             }
