@@ -1,23 +1,31 @@
-import java.util.Scanner;
-import java.util.StringTokenizer;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class Main {
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        StringTokenizer st = new StringTokenizer(sc.nextLine());
-        int a = Integer.parseInt(st.nextToken());
-        int b = Integer.parseInt(st.nextToken());
-        int c = Integer.parseInt(st.nextToken());
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String[] abc = br.readLine().split(" ");
+        int a = Integer.parseInt(abc[0]);
+        int b = Integer.parseInt(abc[1]);
+        int c = Integer.parseInt(abc[2]);
+        br.close();
 
-        System.out.println(getMultiMod(a, b, c));
+        System.out.println(divideMod(a, b, c));
     }
 
-    private static long getMultiMod(int a, int b, int c) {
-        if (b == 1) return a % c;
+    private static long divideMod(int a, int b, int c) {
+        if (b == 1) {
+            return a % c;
+        }
 
-        long sub = getMultiMod(a, b / 2, c);
-        return b % 2 == 0 ? sub * sub % c : (sub * sub % c) * a % c;
+        long half = divideMod(a, b / 2, c);
+
+        if (b % 2 == 0) {
+            return half * half % c;
+        }
+        return (half * half % c) * a % c;
     }
 
 }
