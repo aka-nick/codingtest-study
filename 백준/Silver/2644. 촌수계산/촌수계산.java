@@ -3,50 +3,48 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.StringTokenizer;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine());
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        int manFrom = Integer.parseInt(st.nextToken());
-        int manTo = Integer.parseInt(st.nextToken());
-        int numberOfAdj = Integer.parseInt(br.readLine());
-        boolean[][] adjacent = new boolean[n + 1][n + 1];
-        for (int i = 0; i < numberOfAdj; i++) {
-            st = new StringTokenizer(br.readLine());
-            int adj1 = Integer.parseInt(st.nextToken());
-            int adj2 = Integer.parseInt(st.nextToken());
-            adjacent[adj1][adj2] = true;
-            adjacent[adj2][adj1] = true;
+        String[] line = br.readLine().split(" ");
+        int start = Integer.parseInt(line[0]);
+        int end = Integer.parseInt(line[1]);
+        int m = Integer.parseInt(br.readLine());
+        boolean[][] adj = new boolean[n + 1][n + 1];
+        for (int i = 0; i < m; i++) {
+            String[] split = br.readLine().split(" ");
+            int i1 = Integer.parseInt(split[0]);
+            int i2 = Integer.parseInt(split[1]);
+            adj[i1][i2] = true;
+            adj[i2][i1] = true;
         }
         br.close();
 
-        Deque<Integer> q = new ArrayDeque<>();
         boolean[] visited = new boolean[n + 1];
-        q.add(manFrom);
-        visited[manFrom] = true;
-        int step = 0;
+        Deque<Integer> q = new ArrayDeque<>();
 
+        q.addLast(start);
+        visited[start] = true;
+        int count = 0;
         while (!q.isEmpty()) {
-            step++;
+            count++;
             int size = q.size();
-            while (size-- > 0) {
-                int nowFrom = q.pollFirst();
-                for (int nowTo = 1; nowTo <= n; nowTo++) {
-                    if (nowTo == nowFrom) continue;
-                    if (visited[nowTo]) continue;
-                    if (!adjacent[nowFrom][nowTo]) continue;
+            while (size-->0) {
+                Integer now = q.removeFirst();
+                for (int i = 1; i <= n; i++) {
+                    if (!adj[now][i]) continue;
+                    if (visited[i]) continue;
 
-                    if (nowTo == manTo) {
-                        System.out.println(step);
+                    if (i == end) {
+                        System.out.println(count);
                         return;
                     }
 
-                    visited[nowTo] = true;
-                    q.add(nowTo);
+                    q.addLast(i);
+                    visited[i] = true;
                 }
             }
         }
