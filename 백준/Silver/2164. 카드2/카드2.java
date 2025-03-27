@@ -8,19 +8,22 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int n = Integer.parseInt(br.readLine());
+        int number = Integer.parseInt(br.readLine());
         br.close();
 
-        Deque<Integer> deck = new ArrayDeque<>();
-        for (int i = 1; i <= n; i++) {
-            deck.addLast(i);
+        Deque<Integer> numbers = new ArrayDeque<>();
+        for (int i = 1; i <= number; i++) {
+            numbers.addLast(i);
         }
 
-        while (1 < deck.size()) {
-            deck.removeFirst();
-            deck.addLast(deck.removeFirst());
+        while (true) {
+            Integer removed = numbers.removeFirst();
+            if (numbers.isEmpty()) {
+                System.out.println(removed);
+                break;
+            }
+            numbers.addLast(numbers.removeFirst());
         }
-
-        System.out.println(deck.getFirst());
     }
+
 }
