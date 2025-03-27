@@ -8,24 +8,28 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int n = Integer.parseInt(br.readLine());
+        int t = Integer.parseInt(br.readLine());
         int count = 0;
-        while (n-->0) {
-            String word = br.readLine();
-            String[] wordArr = word.split("");
-            Deque<String> s = new ArrayDeque<>();
-            for (int i = 0; i < wordArr.length; i++) {
-                if (s.isEmpty() || !wordArr[i].equals(s.peekLast())) {
-                    s.addLast(wordArr[i]);
+        while (t-- > 0) {
+            char[] chars = br.readLine().toCharArray();
+
+            Deque<Character> dq = new ArrayDeque<>();
+            dq.addLast(chars[0]);
+            for (int i = 1; i < chars.length; i++) {
+                if (!dq.isEmpty() && dq.peekLast() == chars[i]) {
+                    dq.removeLast();
                 } else {
-                    s.removeLast();
+                    dq.addLast(chars[i]);
                 }
             }
-            if (s.isEmpty()) count++;
+
+            if (dq.isEmpty()) {
+                count++;
+            }
         }
         br.close();
 
         System.out.println(count);
     }
-    
+
 }
