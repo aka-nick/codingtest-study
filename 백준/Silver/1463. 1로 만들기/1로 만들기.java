@@ -1,24 +1,26 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class Main {
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int x = sc.nextInt();
-        int count = dp(x, 0);
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine());
+        br.close();
 
-        System.out.println(count);
-    }
-
-    static int dp(int n, int cnt) {
-        if (n < 2) {
-            return cnt;
+        int[] arr = new int[n + 1];
+        for (int i = 2; i <= n; i++) {
+            arr[i] = arr[i - 1] + 1;
+            if (i % 2 == 0) {
+                arr[i] = Math.min(arr[i], arr[i / 2] + 1);
+            }
+            if (i % 3 == 0) {
+                arr[i] = Math.min(arr[i], arr[i / 3] + 1);
+            }
         }
 
-        return Math.min(
-                dp(n / 2, cnt + 1 + (n % 2)),
-                dp(n / 3, cnt + 1 + (n % 3))
-        );
+        System.out.println(arr[n]);
     }
 
 }
