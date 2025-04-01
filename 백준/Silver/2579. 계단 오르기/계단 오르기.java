@@ -7,33 +7,20 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine());
-        int[] v = new int[n + 3];
+        int[] s = new int[n + 1];
         for (int i = 1; i <= n; i++) {
-            v[i] = Integer.parseInt(br.readLine());
+            s[i] = Integer.parseInt(br.readLine());
         }
-
-        int[] f = new int[n + 3];
-        setBaseCase(n, v, f);
-
-        bottomUp(n, v, f);
-
         br.close();
-        System.out.println(f[n]);
-    }
 
-    private static void bottomUp(int n, int[] v, int[] f) {
-        for (int i = 3; i <= n; i++) {
-            f[i] = Math.max(v[i - 1] + f[i - 3], f[i - 2]) + v[i];
+        int[][] d = new int[n + 1][3];
+        d[1][1] = s[1];
+        for (int i = 2; i <= n; i++) {
+            d[i][1] = Math.max(d[i - 2][1], d[i - 2][2]) + s[i];
+            d[i][2] = d[i - 1][1] + s[i];
         }
+
+        System.out.println(Math.max(d[n][1], d[n][2]));
     }
 
-    private static void setBaseCase(int n, int[] v, int[] f) {
-        f[0] = 0;
-        f[1] = v[1];
-
-        if (2 <= n) {
-            f[2] = v[1] + v[2];
-        }
-    }
-    
 }
